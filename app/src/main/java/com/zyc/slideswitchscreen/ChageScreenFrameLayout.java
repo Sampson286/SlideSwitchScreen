@@ -1,4 +1,5 @@
 package com.zyc.slideswitchscreen;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
+
 /**
  * Created by zyc on 2016/10/13.
  * 用户切换两个视图的布局
@@ -177,6 +179,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
 
     /***
      * 初始化一些数据
+     *
      * @param context
      */
     private void initData(Context context) {
@@ -185,7 +188,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
         widthPixels = dm.widthPixels;
         averageDuration = (int) ((widthPixels / standardWidth) * averageDuration);
         // 用于计算被覆盖的移动的距离，产生上下同时完成单速度不同的效果
-        firstLayoutOffset = (widthPixels / 5)*4;
+        firstLayoutOffset = (widthPixels / 5) * 4;
         // 手势控制渐变的比例
         int gestrueAlpha = 2;
         translateFactor = ((float) 1) / (widthPixels);
@@ -441,7 +444,6 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
 
     /**
      * 结束动画
-     *
      */
     private void endAnimation() {
         int duration = (int) (((1 - Math.abs(currentTranslate)) * SCREEN_DIVID_BY) * averageDuration);
