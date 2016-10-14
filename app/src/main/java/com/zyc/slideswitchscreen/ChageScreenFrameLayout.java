@@ -185,7 +185,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
         widthPixels = dm.widthPixels;
         averageDuration = (int) ((widthPixels / standardWidth) * averageDuration);
         // 用于计算被覆盖的移动的距离，产生上下同时完成单速度不同的效果
-        firstLayoutOffset = widthPixels / 3;
+        firstLayoutOffset = (widthPixels / 5)*4;
         // 手势控制渐变的比例
         int gestrueAlpha = 2;
         translateFactor = ((float) 1) / (widthPixels);
@@ -270,11 +270,10 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                 if (isCollapse && (x - mLastMotionX) < 0) {
                     return false;
                 }
-                int touchSlop = mTouchSlop;
                 float yDiff = Math.abs(y - mLastMotionY);
                 float xDiff = Math.abs(x - mLastMotionX);
-                boolean yMoved = yDiff > touchSlop;
-                boolean xMoved = xDiff > touchSlop;
+                boolean yMoved = yDiff > mTouchSlop;
+                boolean xMoved = xDiff > mTouchSlop;
                 if (yMoved && yDiff > xDiff) {
                     MotionEvent motionEvent = MotionEvent.obtain(ev);
                     motionEvent.setAction(MotionEvent.ACTION_DOWN);
@@ -283,8 +282,6 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                     isStartSwitchAnim = true;
                     return true;
                 }
-                break;
-            case MotionEvent.ACTION_UP:
                 break;
         }
         return mGestureDetector.onTouchEvent(ev);
@@ -301,8 +298,6 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
         }
         int x = (int) event.getX();
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                break;
             case MotionEvent.ACTION_MOVE:
                 int dx = x - mLastMotionX;
                 if (dx != 0) {
@@ -330,13 +325,13 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                 lastTranslate = currentTranslate;
                 if (isMoveToRight) {
                     if (x - mFirstMotionX > widthPixels * 0.5f) {
-                        endAnimation(false);
+                        endAnimation();
                     } else {
                         cancelAnimation();
                     }
                 } else {
                     if (x + (widthPixels - mFirstMotionX) < widthPixels * 0.5f) {
-                        endAnimation(false);
+                        endAnimation();
                     } else {
                         cancelAnimation();
                     }
@@ -447,9 +442,8 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
     /**
      * 结束动画
      *
-     * @param endByVelocity 是否根据移动速率结束动画
      */
-    private void endAnimation(boolean endByVelocity) {
+    private void endAnimation() {
         int duration = (int) (((1 - Math.abs(currentTranslate)) * SCREEN_DIVID_BY) * averageDuration);
         accelerantTween.start(duration);
     }
