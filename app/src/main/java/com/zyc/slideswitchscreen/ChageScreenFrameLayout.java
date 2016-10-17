@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -307,8 +306,6 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                     if ((mLastMotionX - mFirstMotionX > 0 && x - mFirstMotionX < 0)
                             || (mLastMotionX - mFirstMotionX < 0 && x
                             - mFirstMotionX > 0)) {
-                        // currentAlpha = START_ALPHA;
-                        currentTranslate = START_TRANSLATE;
                         dx = x - mFirstMotionX;
                     }
                     doAnimation(dx, x < mFirstMotionX);
@@ -319,6 +316,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                 mLastMotionX = x;
                 break;
             case MotionEvent.ACTION_UP:
+                //通过当前X和最开始的位置来判断滑动方向
                 if (x >= mFirstMotionX) {
                     isMoveToRight = true;
                 } else {
@@ -396,13 +394,10 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
         if (!isCancel) {
             isCollapse = !isCollapse;
         }
-
     }
 
     @Override
     public void onTweenStop() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -446,6 +441,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
      * 结束动画
      */
     private void endAnimation() {
+        //根据已经完成的距离，来计算一下还需要多长时间来完成后续的动画
         int duration = (int) (((1 - Math.abs(currentTranslate)) * SCREEN_DIVID_BY) * averageDuration);
         accelerantTween.start(duration);
     }
@@ -476,11 +472,11 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                             canvas.translate(firstLayoutOffset
                                     * currentTranslate, 0);
                             drawChild(canvas, child, getDrawingTime());
-                            if (currentAlpha < 0.99f) {
+                            /*if (currentAlpha < 0.99f) {
                                 Paint paint = new Paint();
                                 paint.setAlpha((int) (currentAlpha * 255));
                                 canvas.drawPaint(paint);
-                            }
+                            }*/
                             canvas.restore();
                         }
                         if (i == 1) {
@@ -492,7 +488,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                                     if (sideBitmap == null) {
                                         sideBitmap = BitmapFactory
                                                 .decodeResource(getResources(),
-                                                        R.mipmap.td_bg_right);
+                                                        R.mipmap.main_bg_right);
                                     }
                                     // 进行屏幕的移动
                                     canvas.translate(
@@ -508,7 +504,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                                     if (sideBitmap == null) {
                                         sideBitmap = BitmapFactory
                                                 .decodeResource(getResources(),
-                                                        R.mipmap.td_bg_right);
+                                                        R.mipmap.main_bg_right);
                                     }
                                     canvas.translate(widthPixels
                                             * (1 + currentTranslate), 0);
