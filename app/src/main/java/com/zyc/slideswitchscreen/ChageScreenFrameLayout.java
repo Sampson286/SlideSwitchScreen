@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -127,6 +128,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
+                //动画完成
                 case ANIMATION_END:
                     isAnimation = false;
                     isStartDrag = false;
@@ -136,17 +138,18 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                                 getChildAt(1).getMeasuredHeight());
                         getChildAt(0).layout(0, 0, getChildAt(0).getWidth(),
                                 getChildAt(0).getMeasuredHeight());
-                    } else {
-                        getChildAt(1).layout(0, 0, getChildAt(1).getWidth(),
-                                getChildAt(1).getMeasuredHeight());
+                    } else {getChildAt(1).layout(0, 0, getChildAt(1).getWidth(),
+                            getChildAt(1).getMeasuredHeight());
                         getChildAt(0).layout(
                                 getChildAt(0).getLeft() + firstLayoutOffset,
                                 0,
                                 getChildAt(0).getLeft() + getChildAt(0).getWidth()
                                         + firstLayoutOffset,
                                 getChildAt(0).getMeasuredHeight());
+
                     }
                     break;
+                //取消
                 case ANIMATION_CANCEL:
                     isAnimation = false;
                     isStartDrag = false;
@@ -375,7 +378,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
         }
         currentAlpha = currentAlpha < START_ALPHA ? currentAlpha : START_ALPHA;
         if (currentTranslate >= 1.0f) {
-            currentAlpha = currentTranslate = 1.0f;
+            currentTranslate = 1.0f;
         }
         invalidate();
     }
@@ -469,14 +472,16 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                     if (child != null) {
                         if (i == 0) {
                             canvas.save();
+                            //画布的移动
                             canvas.translate(firstLayoutOffset
                                     * currentTranslate, 0);
                             drawChild(canvas, child, getDrawingTime());
-                            /*if (currentAlpha < 0.99f) {
+                            //透明度的绘制
+                            if (currentAlpha < 0.99f) {
                                 Paint paint = new Paint();
                                 paint.setAlpha((int) (currentAlpha * 255));
                                 canvas.drawPaint(paint);
-                            }*/
+                            }
                             canvas.restore();
                         }
                         if (i == 1) {
@@ -526,6 +531,7 @@ public class ChageScreenFrameLayout extends FrameLayout implements TweenAnimatio
                 if (this.isCancel) {
                     this.isCancel = false;
                     super.dispatchDraw(canvas);
+                    //通知动画的完成结果
                     handler.postAtTime(new Runnable() {
                         @Override
                         public void run() {
