@@ -10,5 +10,8 @@
 
 ![](https://github.com/zhaoyongchao/SlideSwitchScreen/blob/master/images/ezgif.com-video-to-gif%20_demo.gif?raw=true)
 
+- 引入项目
 
-大家可以下载源码来看一下大部分都有注释。
+```compile 'zyc.SlideSwitchScreen:mylibrary:1.0'```
+
+- 大家可以下载源码来看一下大部分都有注释。
